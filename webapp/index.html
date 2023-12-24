@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust WebAssembly Calculator</title>
+    <style>
+        /* 基本的なスタイル - 必要に応じて変更してください */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .calculator {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+<div class="calculator">
+    <input type="number" id="inputA" placeholder="Number A">
+    <input type="number" id="inputB" placeholder="Number B">
+    <button id="calculateButton">Calculate</button>
+    <div id="result">Result: <span id="output"></span></div>
+</div>
+
+<!-- WebAssembly モジュールの読み込み -->
+<script type="module">
+    import init, { calculate } from "../pkg/wasm.js";
+
+    async function runWasm() {
+        await init()
+        document.getElementById('calculateButton').addEventListener('click', () => {
+            const inputA = parseFloat(document.getElementById('inputA').value);
+            const inputB = parseFloat(document.getElementById('inputB').value);
+            const result = calculate(Number(inputA), Number(inputB)); // Rust関数を呼び出し
+            document.getElementById('output').textContent = result;
+        });
+    }
+
+    runWasm();
+</script>
+</body>
+</html>
